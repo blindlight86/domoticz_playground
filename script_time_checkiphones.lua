@@ -166,7 +166,7 @@ function updateinfo(user,credentials)
 		if (powerstateval == 'Charging' or powerstateval == 'Charged') then
 			commandArray['Variable:'..user..'_interval']=tostring(charging_interval)
 		else
-			if (bat=0) then
+			if (bat==0) then
 				commandArray['Variable:'..user..'_interval']='1'
 			elseif (bat<=10) then
 				commandArray['Variable:'..user..'_interval']=tostring(le10_interval)
