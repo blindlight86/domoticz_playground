@@ -166,7 +166,9 @@ function updateinfo(user,credentials)
 		if (powerstateval == 'Charging' or powerstateval == 'Charged') then
 			commandArray['Variable:'..user..'_interval']=tostring(charging_interval)
 		else
-			if (bat<=10) then
+			if (bat=0) then
+				commandArray['Variable:'..user..'_interval']='1'
+			elseif (bat<=10) then
 				commandArray['Variable:'..user..'_interval']=tostring(le10_interval)
 			elseif (bat<=20) then
 				commandArray['Variable:'..user..'_interval']=tostring(le20_interval)
@@ -187,7 +189,7 @@ for user,credentials in pairs(users) do
 			commandArray['Variable:'..user..'_interval'] = uservariables[user..'_set_interval']
 		end
 		interval = uservariables[user..'_interval']
-		print (user..'刷新间隔'..interval..'分钟')
+		--print (user..'刷新间隔'..interval..'分钟')
 		if ( interval > 5) then
 			if ((m+1) % interval ==0) then
 				info=fmipinfo(credentials)
