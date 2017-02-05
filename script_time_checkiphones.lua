@@ -199,7 +199,7 @@ for user,credentials in pairs(users) do
 	while true do
 		if (m == 0) then m=60 end
 		if (uservariables[user..'_set_interval'] ~= 0) then
-			commandArray['Variable:'..user..'_interval'] = uservariables[user..'_set_interval']
+			commandArray['Variable:'..user..'_interval'] = tostring(uservariables[user..'_set_interval'])
 		end
 		interval = uservariables[user..'_interval']
 		--print (user..'刷新间隔'..interval..'分钟')
