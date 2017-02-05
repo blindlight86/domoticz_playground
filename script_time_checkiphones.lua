@@ -88,6 +88,15 @@ function address(longitude, latitude)
 	return addr
 end
 
+--短网址
+function shortenurl(text)
+	commandsu = "curl -s 'http://tinyurl.com/api-create.php?url=" .. text .. "'"
+	local handle = io.popen(commandsu)
+	local result = handle:read("*a")
+	handle:close()
+	short_url = result
+	return result
+end
 --位置，电池状态，获取时间更新
 function updateinfo(user,credentials)
 	info=fmipinfo(credentials)
@@ -128,8 +137,12 @@ function updateinfo(user,credentials)
 		position = address(lon,lat)
 		position=string.gsub(position,credentials.cityname,"");
 		if (string.find(position, "区")~=nil) then
+			long_url = 'http://uri.amap.com/marker?position='..lon..','..lat
+			short_url=shortenurl(long_url)
 			position_text = '<a style="color:black" target="blank" href="http://uri.amap.com/marker?position='..lon..','..lat..'">'..position..'('..fixedtime..')</a><br>电池状态:' .. powerstatus.. '</br>'
 		else
+			long_url = 'http://api.map.baidu.com/marker?title='..user..'&content=这&output=html&location='..lat..','..lon
+			short_url=shortenurl(long_url)
 			--position_text = '<a style="color:black" target="blank" href="http://cn.bing.com/ditu/?lvl=17&cp='..lat..'~'..lon..'">'..position..'('..fixedtime..')</a><br>电池状态:' .. powerstatus.. '</br>'
 			position_text = '<a style="color:black" target="blank" href="http://api.map.baidu.com/marker?title='..user..'&content=我在这&output=html&location='..lat..','..lon..'">'..position..'('..fixedtime..')</a><br>电池状态:' .. powerstatus.. '</br>'
 		end
