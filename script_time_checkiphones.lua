@@ -187,6 +187,9 @@ function updateinfo(user,credentials)
 				commandArray['Variable:'..user..'_interval']=tostring(le20_interval)
 			end
 		end
+		if (uservariables[user..'_set_interval'] ~= 0) then
+			commandArray['Variable:'..user..'_interval'] = tostring(uservariables[user..'_set_interval'])
+		end
 		
 		print(position_text)
         print('查找我的iPhone： ' .. user .. '在' .. position .. '于' .. fixedtime .. '，电池状态：' .. bat .. '%,' .. powerstatus)
@@ -198,9 +201,6 @@ function updateinfo(user,credentials)
 for user,credentials in pairs(users) do
 	while true do
 		if (m == 0) then m=60 end
-		if (uservariables[user..'_set_interval'] ~= 0) then
-			commandArray['Variable:'..user..'_interval'] = tostring(uservariables[user..'_set_interval'])
-		end
 		interval = uservariables[user..'_interval']
 		--print (user..'刷新间隔'..interval..'分钟')
 		if ( interval > 5) then
