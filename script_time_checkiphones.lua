@@ -1,5 +1,5 @@
 --[[
-每个用户创建4个device，Switch——<用户>的iPhone；Custom——<用户>的iPhone电量；Custom——<用户>的iPhone离家；Text——<用户>的位置
+每个用户创建5个device，Switch——<用户>的iPhone；Custom——<用户>的iPhone电量；Custom——<用户>的iPhone离家；Text——<用户>的位置; Text——<用户>位于
 每个用户创建2个变量，integer——<用户>_interval (用于保存时间间隔)；integer——<用户>_set_interval (用于强制设置时间间隔，默认0不设置)
 注册高德地图开发者获取API
 注册百度地图开发者获取API
@@ -135,16 +135,26 @@ function updateinfo(user,credentials)
 		distance = math.sqrt(((lon - credentials.homelongitude) * 111.320 * math.cos(math.rad(lat)))^2 + ((lat - credentials.homelatitude) * 110.547)^2)
 		distance = math.floor((distance*1000+0.5)/1000)
 		position = address(lon,lat)
-		position=string.gsub(position,credentials.cityname,"");
+		position=string.gsub(position,credentials.cityname,"")
 		if (string.find(position, "区")~=nil) then
 			long_url = 'http://uri.amap.com/marker?position='..lon..','..lat
 			short_url=shortenurl(long_url)
-			position_text = '<a style="color:black" target="blank" href="http://uri.amap.com/marker?position='..lon..','..lat..'">'..position..'('..fixedtime..')</a><br>电池状态:' .. powerstatus.. '</br>'
+			position_text = '<a style="color:black" target="blank" href="'..short_url..'">'..position..'('..fixedtime..')</a><br>电池状态:' .. powerstatus.. '</br>'
+			long_pic='http://restapi.amap.com/v3/staticmap?markers=mid,0xFFFF00,A:'..lon..','..lat..'&key='..amapkey..'&size=300*130&zoom=14'
+			short_pic = shortenurl(long_pic)
+			location_pic = '<iframe width="300" height="130" frameborder="0" style="border:0" src="'..short_pic..'" allowfullscreen></iframe>'
+			print (location_pic)
+			table.insert(commandArray,{['UpdateDevice'] = otherdevices_idx[user .. '位于'] .. '|0|' .. location_pic})
 		else
 			long_url = 'http://api.map.baidu.com/marker?title='..user..'&content=这&output=html&location='..lat..','..lon
 			short_url=shortenurl(long_url)
 			--position_text = '<a style="color:black" target="blank" href="http://cn.bing.com/ditu/?lvl=17&cp='..lat..'~'..lon..'">'..position..'('..fixedtime..')</a><br>电池状态:' .. powerstatus.. '</br>'
-			position_text = '<a style="color:black" target="blank" href="http://api.map.baidu.com/marker?title='..user..'&content=我在这&output=html&location='..lat..','..lon..'">'..position..'('..fixedtime..')</a><br>电池状态:' .. powerstatus.. '</br>'
+			position_text = '<a style="color:black" target="blank" href="'..short_url..'">'..position..'('..fixedtime..')</a><br>电池状态:' .. powerstatus.. '</br>'
+			long_pic='http://api.map.baidu.com/staticimage/v2?ak='..baiduAk..'&markers='..lon..','..lat..'&zoom=16&markerStyles=m,A,0xFFFF00&width=300&height=130'
+			short_pic = shortenurl(long_pic)
+			location_pic = '<iframe width="300" height="130" frameborder="0" style="border:0" src="'..short_pic..'" allowfullscreen></iframe>'
+			print (location_pic)
+			table.insert(commandArray,{['UpdateDevice'] = otherdevices_idx[user .. '位于'] .. '|0|' .. location_pic})
 		end
 		table.insert(commandArray,{['UpdateDevice'] = otherdevices_idx[user .. '的位置'] .. '|0|' .. position_text})
 		table.insert(commandArray,{['UpdateDevice'] = otherdevices_idx[user .. '的iPhone离家'] .. '|0|' .. distance})
