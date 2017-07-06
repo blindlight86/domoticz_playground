@@ -136,7 +136,7 @@ function updateinfo(user,credentials)
 		distance = math.floor((distance*1000+0.5)/1000)
 		position = address(lon,lat)
 		position=string.gsub(position,credentials.cityname,"")
-		if (string.find(position, "区")~=nil) then
+		if (string.find(position, "区")~=nil or string.find(position, "镇")~=nil) then
 			long_url = 'http://uri.amap.com/marker?position='..lon..','..lat
 			short_url=shortenurl(long_url)
 			position_text = '<a style="color:black" target="blank" href="'..short_url..'">'..position..'('..fixedtime..')</a><br>电池状态:' .. powerstatus.. '</br>'
